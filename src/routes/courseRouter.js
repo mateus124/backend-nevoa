@@ -4,12 +4,129 @@ import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const app = express.Router();
 
+/**
+ * @openapi
+ * /courses:
+ *   post:
+ *     tags:
+ *       - Courses
+ *     summary: Create a course (authenticated)
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               duration:
+ *                 type: integer
+ *     responses:
+ *       '201':
+ *         description: Course created
+ */
 app.post("/", authMiddleware, courseController.create);
+
+/**
+ * @openapi
+ * /courses:
+ *   get:
+ *     tags:
+ *       - Courses
+ *     summary: List courses (authenticated)
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       '200':
+ *         description: List of courses
+ */
 app.get("/", authMiddleware, courseController.list);
+
+/**
+ * @openapi
+ * /courses/{id}:
+ *   get:
+ *     tags:
+ *       - Courses
+ *     summary: Get a course by id (authenticated)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Course object
+ */
 app.get("/:id", authMiddleware, courseController.getById);
+
+/**
+ * @openapi
+ * /courses/{id}:
+ *   put:
+ *     tags:
+ *       - Courses
+ *     summary: Update a course (authenticated)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *     responses:
+ *       '200':
+ *         description: Course updated
+ */
 app.put("/:id", authMiddleware, courseController.update);
+
+/**
+ * @openapi
+ * /courses/{id}:
+ *   delete:
+ *     tags:
+ *       - Courses
+ *     summary: Delete a course (authenticated)
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Course deleted
+ */
 app.delete("/:id", authMiddleware, courseController.remove);
 
+/**
+ * @openapi
+ * /courses/public/catalog:
+ *   get:
+ *     tags:
+ *       - Courses
+ *     summary: Public catalog of active courses
+ *     responses:
+ *       '200':
+ *         description: Public list of active courses
+ */
 app.get("/public/catalog", courseController.publicCatalog);
 
 export default app;
