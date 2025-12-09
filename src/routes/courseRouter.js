@@ -129,4 +129,26 @@ app.delete("/:id", authMiddleware, courseController.remove);
  */
 app.get("/public/catalog", courseController.publicCatalog);
 
+/**
+ * @openapi
+ * /courses/public/search:
+ *   get:
+ *     tags:
+ *       - Courses
+ *     summary: Search courses by title
+ *     parameters:
+ *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Title or part of the title to search
+ *     responses:
+ *       '200':
+ *         description: List of courses matching the search
+ *       '400':
+ *         description: Missing or invalid query parameter
+ */
+app.get("/public/search", courseController.searchByTitle);
+
 export default app;

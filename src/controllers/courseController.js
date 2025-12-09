@@ -64,3 +64,17 @@ export async function publicCatalog(req, res) {
         res.status(500).json({ error: error.message });
     }
 }
+
+export async function searchByTitle(req, res) {
+    try {
+        const { title } = req.query;
+        if (!title) {
+            return res.status(400).json({ error: "Parâmetro 'title' é obrigatório!" });
+        }
+
+        const courseList = await courseService.searchCoursesByTitle(title);
+        res.json(courseList);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
