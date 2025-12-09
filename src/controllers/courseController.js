@@ -15,8 +15,11 @@ export async function create(req, res) {
 
 export async function list(req, res) {
     try {
-        const courseList = await courseService.listCourses();
-        res.json(courseList);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const query = await courseService.listCourses(page, limit);
+        res.json(query);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -60,6 +63,31 @@ export async function publicCatalog(req, res) {
     try {
         const courseList = await courseService.listActiveCourses();
         res.json(courseList);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export async function searchByTitle(req, res) {
+    try {
+        const { title } = req.query;
+        if (!title) {
+            return res.status(400).json({ error: "Parâmetro 'title' é obrigatório!" });
+        }
+
+        const courseList = await courseService.searchCoursesByTitle(title);
+        res.json(courseList);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+export async function listByAuthor(req, res) {
+    try {
+        const id = req.userId;
+        const coursesList = await courseService.listCoursesByAuthor(id);
+
+        res.json(coursesList);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
