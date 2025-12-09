@@ -39,6 +39,8 @@ app.post("/", authMiddleware, courseController.create);
  *     tags:
  *       - Courses
  *     summary: List courses with pagination
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: query
  *         name: page
@@ -65,6 +67,8 @@ app.get("/", authMiddleware, courseController.list);
  *     tags:
  *       - Courses
  *     summary: List all courses created by the authenticated user
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       '200':
  *         description: List of user's courses
