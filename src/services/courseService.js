@@ -1,15 +1,18 @@
 import Course from "../models/course.js";
 
-export async function createCourse(data) {
-    return Course.create(data);
+export async function createCourse(data, userId) {
+    return Course.create({ ...data, userId });
 }
 
 export async function listCourses() {
-    return Course.findAll();
+    return Course.findAll({ include: { association: "author", attributes: ["id", "name", "email"] } });
 }
 
 export async function getCourseById(id) {
-    const course = await Course.findByPk(id);
+    const course = await Course.findByPk(id, {
+        include: { association: "author", attributes: ["id", "name", "email"] },
+    });
+
     if (!course) {
         throw new Error("Curso não encontrado!");
     }
@@ -30,5 +33,8 @@ export async function deleteCourse(id) {
 }
 
 export async function listActiveCourses() {
-    return Course.findAll({ where: { status: true } });
+    return Course.findAll({
+        where: { status: true },
+        include: { association: "author", attributes: ["id", "name", "email"] },
+    });
 }

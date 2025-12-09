@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/database.js";
+import User from "./user.js";
 
 const Course = sequelize.define("Course", {
     id: {
@@ -31,5 +32,8 @@ const Course = sequelize.define("Course", {
     tableName: "courses",
     timestamps: false,
 });
+
+Course.belongsTo(User, { foreignKey: "userId", as: "author" });
+User.hasMany(Course, { foreignKey: "userId", as: "courses" });
 
 export default Course;

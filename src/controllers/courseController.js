@@ -4,7 +4,8 @@ import { courseSchema } from "../validators/courseValidators.js";
 export async function create(req, res) {
     try {
         const courseValido = courseSchema.parse(req.body);
-        const course = await courseService.createCourse(courseValido);
+        const author = req.userId;
+        const course = await courseService.createCourse(courseValido, author);
 
         res.status(201).json(course);
     } catch (error) {
