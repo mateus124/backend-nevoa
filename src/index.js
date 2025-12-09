@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import { authenticate } from "./config/database.js";
 import userRoutes from "./routes/userRouter.js";
+import courseRoutes from "./routes/courseRouter.js"
 
 authenticate()
     .then(() => {
@@ -15,6 +16,7 @@ const app = express();
 
 app.use(json());
 app.use("/api/user/", userRoutes);
+app.use("/api/course/", courseRoutes)
 
 app.listen(port, () => {
     console.log(`Rodando api na porta: ${port}`);
