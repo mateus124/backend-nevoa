@@ -1,9 +1,11 @@
-const express = require("express");
+import express from "express";
+import { register, login, getUser } from "../controllers/userController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const app = express.Router();
 
-app.get("/ping", (req, res) => {
-    res.json({ message: "pong!" });
-});
+app.post("/register", register);
+app.post("/login", login);
+app.get("/profile", authMiddleware, getUser);
 
-module.exports = app;
+export default app;
