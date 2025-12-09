@@ -38,14 +38,38 @@ app.post("/", authMiddleware, courseController.create);
  *   get:
  *     tags:
  *       - Courses
- *     summary: List courses (authenticated)
- *     security:
- *       - bearerAuth: []
+ *     summary: List courses with pagination
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
  *     responses:
  *       '200':
- *         description: List of courses
+ *         description: Paginated list of courses
  */
 app.get("/", authMiddleware, courseController.list);
+
+/**
+ * @openapi
+ * /courses/my:
+ *   get:
+ *     tags:
+ *       - Courses
+ *     summary: List all courses created by the authenticated user
+ *     responses:
+ *       '200':
+ *         description: List of user's courses
+ */
+app.get("/my", authMiddleware, courseController.listByAuthor);
 
 /**
  * @openapi
