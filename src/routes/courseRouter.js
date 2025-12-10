@@ -39,6 +39,10 @@ const upload = multer({ storage });
  *                 type: string
  *               duration:
  *                 type: integer
+ *               image:
+ *                 type: string
+ *               status:
+ *                 type: boolean
  *     responses:
  *       '201':
  *         description: Course created
@@ -164,6 +168,15 @@ app.get("/:id", authMiddleware, courseController.getById);
  *         application/json:
  *           schema:
  *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               duration:
+ *                 type: integer
+ *               status:
+ *                 type: boolean
  *     responses:
  *       '200':
  *         description: Course updated
