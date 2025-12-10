@@ -150,10 +150,23 @@ app.delete("/:id", authMiddleware, courseController.remove);
  *   get:
  *     tags:
  *       - Courses
- *     summary: Public catalog of active courses
+ *     summary: Public catalog of active courses with pagination
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 10
+ *         description: Number of items per page
  *     responses:
  *       '200':
- *         description: Public list of active courses
+ *         description: Paginated list of active courses
  */
 app.get("/public/catalog", courseController.publicCatalog);
 

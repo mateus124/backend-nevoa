@@ -30,11 +30,27 @@ export async function deleteCourse(id) {
     return { message: "Curso deletado com sucesso!" };
 }
 
-export async function listActiveCourses() {
-    return Course.findAll({
+export async function listActiveCourses(page = 1, limit = 10) {
+    const parsedPage = Math.max(1, parseInt(page) || 1);
+    const parsedLimit = Math.max(1, Math.min(100, parseInt(limit) || 10));
+
+    const offset = (parsedPage - 1) * parsedLimit;
+
+    const { rows, count } = await Course.findAndCountAll({
         where: { status: true },
+        offset,
+        limit: parsedLimit,
         include: { association: "author", attributes: ["id", "name", "email"] },
+        order: [["id", "DESC"]],
     });
+
+    return {
+        total: count,
+        page: parsedPage,
+        limit: parsedLimit,
+        totalPages: Math.ceil(count / parsedLimit),
+        courses: rows,
+    };
 }
 
 export async function searchCoursesByTitle(title) {

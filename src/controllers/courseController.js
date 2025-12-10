@@ -61,8 +61,11 @@ export async function remove(req, res) {
 
 export async function publicCatalog(req, res) {
     try {
-        const courseList = await courseService.listActiveCourses();
-        res.json(courseList);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        const query = await courseService.listActiveCourses(page, limit);
+        res.json(query);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
