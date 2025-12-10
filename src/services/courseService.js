@@ -93,3 +93,15 @@ export async function listCoursesByAuthor(userId) {
         order: [["id", "DESC"]],
     });
 }
+
+export async function uploadCourseImage(courseId, filePath) {
+    const course = await Course.findByPk(courseId);
+    if (!course) {
+        throw new Error("Curso não encontrado!");
+    }
+
+    course.image = filePath;
+    await course.save();
+
+    return course;
+}

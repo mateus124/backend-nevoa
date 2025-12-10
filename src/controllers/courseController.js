@@ -13,6 +13,20 @@ export async function create(req, res) {
     }
 }
 
+export async function uploadImage(req, res) {
+    try {
+        const { id } = req.params;
+        if (!req.file) {
+            return res.status(400).json({ error: "Nenhum arquivo enviado!" });
+        }
+
+        const course = await courseService.uploadCourseImage(id, req.file.path);
+        res.json({ message: "Imagem enviada com sucesso!", course });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 export async function list(req, res) {
     try {
         const page = parseInt(req.query.page) || 1;

@@ -1,8 +1,21 @@
 import express from "express";
+import multer from "multer";
+import path from "path";
 import * as courseController from "../controllers/courseController.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const app = express.Router();
+
+const storage = multer.diskStorage({
+    destination: "uploads/",
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+        cb(null, uniqueName);
+    },
+});
+
+const upload = multer({ storage });
 
 /**
  * @openapi
@@ -31,6 +44,40 @@ const app = express.Router();
  *         description: Course created
  */
 app.post("/", authMiddleware, courseController.create);
+
+/**
+ * @openapi
+ * /courses/{id}/upload:
+ *   post:
+ *     tags:
+ *       - Courses
+ *     summary: Upload an image for a course
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Course ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       '200':
+ *         description: Image uploaded successfully
+ *       '400':
+ *         description: No file provided
+ */
+app.post("/:id/upload", authMiddleware, upload.single("image"), courseController.uploadImage);
 
 /**
  * @openapi

@@ -19,6 +19,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/courses", courseRouter);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/uploads", express.static("uploads"));
 
 app.listen(port, () => {
     console.log(`Rodando API na porta: ${port}`);
