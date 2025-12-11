@@ -15,6 +15,11 @@ authenticate()
 const port = 8080;
 const app = express();
 
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
+
 app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/courses", courseRouter);
