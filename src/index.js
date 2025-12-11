@@ -1,6 +1,9 @@
-import express, { json } from "express";
+import express from "express";
+import cors from "cors";
 import { authenticate } from "./config/database.js";
-import userRoutes from "./routes/userRouter.js";
+import userRouter from "./routes/userRouter.js";
+import courseRouter from "./routes/courseRouter.js";
+import { swaggerUi, swaggerSpec } from "./config/swagger.js";
 
 authenticate()
     .then(() => {
@@ -13,9 +16,17 @@ authenticate()
 const port = 8080;
 const app = express();
 
-app.use(json());
-app.use("/api/user/", userRoutes);
+app.use(cors({
+    origin: "http://localhost:3000",
+    credentials: true
+}));
+
+app.use(express.json());
+app.use("/api/users", userRouter);
+app.use("/api/courses", courseRouter);
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use("/uploads", express.static("uploads"));
 
 app.listen(port, () => {
-    console.log(`Rodando api na porta: ${port}`);
+    console.log(`Rodando API na porta: ${port}`);
 });
