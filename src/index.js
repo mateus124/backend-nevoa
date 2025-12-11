@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import { authenticate } from "./config/database.js";
 import userRouter from "./routes/userRouter.js";
 import courseRouter from "./routes/courseRouter.js";
